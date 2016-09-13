@@ -1,0 +1,7 @@
+%META:TOPICPARENT{name="ProjectsProgressPlugin"}%
+---+ MILESTONEINFO macro
+
+_This is a macro from [[ProjectsProgressPlugin]], used to query/display various pieces of information related to a projects progress/milestone information._
+
+%STARTINCLUDE%
+TBD.

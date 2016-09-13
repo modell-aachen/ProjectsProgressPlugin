@@ -1,0 +1,14 @@
+%META:TOPICPARENT{name="Plugins"}%
+---+ !ProjectsProgressPlugin %JQREQUIRE{"chili"}%
+
+%SHORTDESCRIPTION%
+%TOC%
+
+---++ Introduction
+TBD.
+
+---++ Installation
+%$INSTALL_INSTRUCTIONS%
+
+---++ Macro: MILESTONEINFO
+%INCLUDE{"VarMILESTONEINFO"}%

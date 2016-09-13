@@ -1,0 +1,3 @@
+Foswiki::Plugins::AmpelPlugin,>=1.2,perl,Required
+Foswiki::Contrib::FontAwesomeContrib,>=1.0,perl,Required
+Foswiki::Contrib::JQPluginContrib,>=1.0,perl,Required

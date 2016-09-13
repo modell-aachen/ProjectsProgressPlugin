@@ -1,0 +1,5 @@
+!noci
+data/System/ProjectsProgressPlugin.txt 0644
+data/System/VarMILESTONEINFO.txt 0644
+lib/Foswiki/Plugins/ProjectsProgressPlugin.pm 0444
+locale/ProjectsProgressPlugin/de.po 0444
