@@ -3,3 +3,7 @@ data/System/ProjectsProgressPlugin.txt 0644
 data/System/VarMILESTONEINFO.txt 0644
 lib/Foswiki/Plugins/ProjectsProgressPlugin.pm 0444
 locale/ProjectsProgressPlugin/de.po 0444
+pub/System/ProjectsProgressPlugin/css/progress.uncompressed.css 0444
+pub/System/ProjectsProgressPlugin/css/progress.css 0444
+pub/System/ProjectsProgressPlugin/js/progress.uncompressed.js 0444
+pub/System/ProjectsProgressPlugin/js/progress.js 0444

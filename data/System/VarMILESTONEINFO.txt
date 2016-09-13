@@ -5,3 +5,21 @@ _This is a macro from [[ProjectsProgressPlugin]], used to query/display various 
 
 %STARTINCLUDE%
 TBD.
+
+
+project:
+   * web.topic
+
+type:
+   * timeline
+      * Zeitstrahl
+   * milestone
+      * Infos über angegenen Milestone
+   * next
+      * Infos über nächsten, nicht geschlossenen, Meilenstein
+
+milestone:
+   * name des Milestones für type=milestone
+
+milestones:
+   * PROJECT_MILESTONES
