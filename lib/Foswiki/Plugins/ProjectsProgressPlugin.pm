@@ -117,12 +117,13 @@ sub _readMilestone {
 sub _toHTML {
   my ($type, $data) = @_;
   my $json = to_json($data);
+  my $days = $Foswiki::cfg{Extensions}{AmpelPlugin}{WARN} || 3;
 
   if ($type eq 'milestone') {
     my $state = ($data->{done} eq JSON::true) ? 'closed' : 'open';
     return <<HTML;
 <div class="milestone">
-  <div class="signal">%SIGNAL{"$data->{due}" status="$state"}%</div>
+  <div class="signal">%SIGNAL{"$data->{due}" status="$state" warn="$days"}%</div>
   <div class="text">
     <span><strong>%RENDERFORDISPLAY{"$data->{project}" format="\$value" fields="$data->{dueName}"}%</strong></span>
     <span>$data->{title}</span>
@@ -142,8 +143,7 @@ HTML
     $icon = 'fa-check' if $isDone;
     $icon = 'fa-play' if $i == 0 && !$isDone;
 
-    my $offset = $Foswiki::cfg{Extensions}{AmpelPlugin}{WARN} || 3;
-    my $warn = $offset * 24 * 60 * 60;
+    my $warn = $days * 24 * 60 * 60;
     my $now = time;
     my $color = 'green';
     if ($entry->{due} < $now) {
