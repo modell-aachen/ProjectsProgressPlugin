@@ -67,7 +67,10 @@ sub tagMILESTONEINFO {
         return _toHTML('milestone', $ms);
       } else {
         my ($index)= grep {@milestones[$_] == $ms} 0..$#milestones;
-        return _toHTML('milestone', shift(@retval)) if ($index + 1 == scalar(@milestones));
+        if ($index + 1 == scalar(@milestones)) {
+          return '' if $isDone;
+          return _toHTML('milestone', shift(@retval));
+        }
       }
 
       $returnNext = $isDone;
