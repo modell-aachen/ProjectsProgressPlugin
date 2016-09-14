@@ -67,7 +67,7 @@ sub tagMILESTONEINFO {
         return _toHTML('milestone', $ms);
       } else {
         my ($index)= grep {@milestones[$_] == $ms} 0..$#milestones;
-        return '' if ($index + 1 == scalar(@milestones));
+        return _toHTML('milestone', shift(@retval)) if ($index + 1 == scalar(@milestones));
       }
 
       $returnNext = $isDone;
@@ -76,7 +76,6 @@ sub tagMILESTONEINFO {
     push(@retval, $ms);
   }
 
-  return _toHTML('milestone', shift(@retval)) if $type eq 'next';
   return _toHTML('timeline', \@retval);
 }
 
@@ -101,8 +100,10 @@ sub _readMilestone {
     push @retval, {
       title => "$title",
       due => int($due->{value}),
+      dueName => $due->{name},
       done => ($done->{value} eq 'done') ? JSON::true : JSON::false,
-      milestone => $milestone
+      milestone => $milestone,
+      project => "$web.$topic"
     };
   }
 
@@ -111,17 +112,16 @@ sub _readMilestone {
 }
 
 sub _toHTML {
-  my ($type, $data, $foo) = @_;
+  my ($type, $data) = @_;
   my $json = to_json($data);
 
   if ($type eq 'milestone') {
-    my $date = Foswiki::Time::formatTime($data->{due}, '$day.$mo.$ye');
     my $state = ($data->{done} eq JSON::true) ? 'closed' : 'open';
     return <<HTML;
 <div class="milestone">
   <div class="signal">%SIGNAL{"$data->{due}" status="$state"}%</div>
   <div class="text">
-    <span><strong>$date</strong></span>
+    <span><strong>%RENDERFORDISPLAY{"$data->{project}" format="\$value" fields="$data->{dueName}"}%</strong></span>
     <span>$data->{title}</span>
     <span class="rawdata">$json</span>
   </div>
@@ -130,14 +130,17 @@ HTML
   }
 
   my @entries;
-  my $nextIsActive = 0;
-  foreach my $entry (@$data) {
-    my $icon = 'fa-play' if $nextIsActive;
-    $nextIsActive = $entry->{done} eq JSON::true;
-    $icon = 'fa-check' if $nextIsActive;
-    $icon = '' unless defined $icon;
+  my $isDone = 0;
+  for (my $i = 0; $i < scalar(@$data); $i++) {
+    my $entry = @$data[$i];
+    my $icon = '';
+    $icon = 'fa-play' if $isDone;
+    $isDone = $entry->{done} eq JSON::true;
+    $icon = 'fa-check' if $isDone;
+    $icon = 'fa-play' if $i == 0 && !$isDone;
 
-    my $warn = 3 * 24 * 60 * 60;
+    my $offset = $Foswiki::cfg{Extensions}{AmpelPlugin}{WARN} || 3;
+    my $warn = $offset * 24 * 60 * 60;
     my $now = time;
     my $color = 'green';
     if ($entry->{due} < $now) {
@@ -151,7 +154,13 @@ HTML
     my $html = <<HTML;
 <div class="entry $color">
   <span class="bar"></span>
-  <span class="circle">$fa</span>
+  <span class="circle">$fa
+    <span class="tooltip">
+      <div><strong>%RENDERFORDISPLAY{"$entry->{project}" format="\$value" fields="$entry->{dueName}"}%</strong></div>
+      <div class="due"><strong>$entry->{due}</strong></div>
+      <div>$entry->{title}</div>
+    </span>
+  </span>
 </div>
 HTML
     push @entries, $html;
@@ -159,12 +168,15 @@ HTML
 
   my $inner = join('', @entries);
   return <<HTML;
-  <div class="timeline">$inner</div>
+  <div class="timeline" data-lang="%LANGUAGE%">$inner</div>
 HTML
 }
 
 sub _injectDeps {
-  Foswiki::Plugins::JQueryPlugin::createPlugin('jqp::moment');
+  foreach my $jqp (qw(jqp::moment jqp::tooltipster)) {
+    Foswiki::Plugins::JQueryPlugin::createPlugin($jqp);
+  }
+
   Foswiki::Func::addToZone('script', 'VUEJSPLUGIN', "<script type=\"text/javascript\" src=\"%PUBURLPATH%/%SYSTEMWEB%/VueJSPlugin/vue.min.js\"></script>");
   Foswiki::Func::addToZone('head', "VUEJS::STYLES", "<link rel=\"stylesheet\" type=\"text/css\" href=\"%PUBURLPATH%/%SYSTEMWEB%/VueJSPlugin/vue.css\" />");
 
