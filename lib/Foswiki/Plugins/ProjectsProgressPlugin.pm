@@ -30,16 +30,16 @@ sub tagMILESTONEINFO {
   my($session, $params, $topic, $web, $topicObject) = @_;
 
   my $project = $params->{_DEFAULT} || $params->{project} || '';
-  return '%RED%<span>Missing param "project"!</span>%ENDCOLOR%' unless $project;
+  return '%RED%Missing param "project"!%ENDCOLOR%' unless $project;
 
   my $type = $params->{type} || 'timeline';
-  return '%RED%<span>Invalid type specified!</span>%ENDCOLOR%' unless $type =~ /^(timeline|milestone|next)$/;
+  return '%RED%Invalid type specified!%ENDCOLOR%' unless $type =~ /^(timeline|milestone|next)$/;
 
   my $milestones = $params->{milestones} || '';
   $milestones =~ s/\s+//g;
 
   my @milestones = split(',', $milestones);
-  return '%RED%<span>Missing param "milestones"!</span>%ENDCOLOR%' unless scalar(@milestones);
+  return '%RED%Missing param "milestones"!%ENDCOLOR%' unless scalar(@milestones);
 
   _injectDeps();
   my $doneField = $params->{donefield} || '$msDone';
@@ -48,7 +48,7 @@ sub tagMILESTONEINFO {
   my ($pweb, $ptopic) = Foswiki::Func::normalizeWebTopicName(undef, $project);
   if ($type eq 'milestone') {
     my $milestone = $params->{milestone} || '';
-    return '%RED%<span>Missing param "milestone"!</span>%ENDCOLOR%' unless $milestones;
+    return '%RED%Missing param "milestone"!%ENDCOLOR%' unless $milestones;
 
     my $ms = _readMilestone($pweb, $ptopic, [$milestone], $doneField, $dueField);
     return _toHTML('milestone', shift(@{$ms}));
@@ -123,9 +123,9 @@ sub _toHTML {
     my $state = ($data->{done} eq JSON::true) ? 'closed' : 'open';
     return <<HTML;
 <div class="milestone">
-  <div class="signal">%SIGNAL{"$data->{due}" status="$state" warn="$days"}%</div>
+  <div class="signal">\%SIGNAL{"$data->{due}" status="$state" warn="$days"}\%</div>
   <div class="text">
-    <span><strong>%RENDERFORDISPLAY{"$data->{project}" format="\$value" fields="$data->{dueName}"}%</strong></span>
+    <span><strong>\%RENDERFORDISPLAY{"$data->{project}" format="\$value" fields="$data->{dueName}"}\%</strong></span>
     <span>$data->{title}</span>
     <span class="rawdata">$json</span>
   </div>
@@ -159,7 +159,7 @@ HTML
   <span class="bar"></span>
   <span class="circle">$fa
     <span class="tooltip">
-      <div><strong>%RENDERFORDISPLAY{"$entry->{project}" format="\$value" fields="$entry->{dueName}"}%</strong></div>
+      <div><strong>\%RENDERFORDISPLAY{"$entry->{project}" format="\$value" fields="$entry->{dueName}"}\%</strong></div>
       <div class="due"><strong>$entry->{due}</strong></div>
       <div>$entry->{title}</div>
     </span>
@@ -171,7 +171,7 @@ HTML
 
   my $inner = join('', @entries);
   return <<HTML;
-  <div class="timeline" data-lang="%LANGUAGE%">$inner</div>
+  <div class="timeline" data-lang="\%LANGUAGE\%">$inner</div>
 HTML
 }
 
@@ -180,19 +180,19 @@ sub _injectDeps {
     Foswiki::Plugins::JQueryPlugin::createPlugin($jqp);
   }
 
-  Foswiki::Func::addToZone('script', 'VUEJSPLUGIN', "<script type=\"text/javascript\" src=\"%PUBURLPATH%/%SYSTEMWEB%/VueJSPlugin/vue.min.js\"></script>");
-  Foswiki::Func::addToZone('head', "VUEJS::STYLES", "<link rel=\"stylesheet\" type=\"text/css\" href=\"%PUBURLPATH%/%SYSTEMWEB%/VueJSPlugin/vue.css\" />");
+  Foswiki::Func::addToZone('script', 'VUEJSPLUGIN', "<script type=\"text/javascript\" src=\"\%PUBURLPATH\%/\%SYSTEMWEB\%/VueJSPlugin/vue.min.js\%QUERYVERSION{name=\"FontAwesomeContrib\" format=\"?version=\$version\"}\%\"></script>");
+  Foswiki::Func::addToZone('head', "VUEJS::STYLES", "<link rel=\"stylesheet\" type=\"text/css\" href=\"\%PUBURLPATH\%/\%SYSTEMWEB\%/VueJSPlugin/vue.css\%QUERYVERSION{name=\"FontAwesomeContrib\" format=\"?version=\$version\"}\%\" />");
 
   my $styles = <<STYLES;
-<link rel="stylesheet" type="text/css" media="all" href="%PUBURLPATH%/%SYSTEMWEB%/FontAwesomeContrib/css/font-awesome.min.css%QUERYVERSION{name="FontAwesomeContrib" format="?version=\$version"}%" />
-<link rel="stylesheet" type="text/css" media="all" href="%PUBURLPATH%/%SYSTEMWEB%/ProjectsProgressPlugin/css/progress.css?version=$RELEASE" />
+<link rel="stylesheet" type="text/css" media="all" href="\%PUBURLPATH\%/\%SYSTEMWEB\%/FontAwesomeContrib/css/font-awesome.min.css\%QUERYVERSION{name="FontAwesomeContrib" format="?version=\$version"}\%" />
+<link rel="stylesheet" type="text/css" media="all" href="\%PUBURLPATH\%/\%SYSTEMWEB\%/ProjectsProgressPlugin/css/progress.css?version=$RELEASE" />
 STYLES
   Foswiki::Func::addToZone('head', 'PROJECTSPROGRESS::CSS', $styles);
 
   Foswiki::Func::addToZone(
     'script',
     'PROJECTSPROGRESS::JS',
-    "<script type=\"text/javascript\" src=\"%PUBURLPATH%/%SYSTEMWEB%/ProjectsProgressPlugin/js/progress.js\"></script>",
+    "<script type=\"text/javascript\" src=\"\%PUBURLPATH\%/\%SYSTEMWEB\%/ProjectsProgressPlugin/js/progress.js?version=$RELEASE\"></script>",
     'JQUERYPLUGIN::JQP::MOMENT,VUEJSPLUGIN,JQUERYPLUGIN::FOSWIKI::PREFERENCES'
   );
 }
