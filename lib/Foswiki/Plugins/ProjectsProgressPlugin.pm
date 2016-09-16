@@ -51,6 +51,7 @@ sub tagMILESTONEINFO {
     return '%RED%Missing param "milestone"!%ENDCOLOR%' unless $milestones;
 
     my $ms = _readMilestone($pweb, $ptopic, [$milestone], $doneField, $dueField);
+    return '' unless defined $ms;
     return _toHTML('milestone', shift(@{$ms}));
   }
 
@@ -66,7 +67,7 @@ sub tagMILESTONEINFO {
       if ($returnHere) {
         return _toHTML('milestone', $ms);
       } else {
-        my ($index)= grep {@milestones[$_] == $ms} 0..$#milestones;
+        my ($index)= grep {$milestones[$_] == $ms} 0..$#milestones;
         if ($index + 1 == scalar(@milestones)) {
           return '' if $isDone;
           return _toHTML('milestone', shift(@retval));
@@ -90,15 +91,15 @@ sub _readMilestone {
 
   foreach my $milestone (@$milestones) {
     my $titlePref = "PROJECT_${milestone}_TITLE";
-    my $done = $doneField;
-    my $due = $dueField;
-    $done =~ s/\$ms/$milestone/;
-    $due =~ s/\$ms/$milestone/;
+    my $nameDone = $doneField;
+    my $nameDue = $dueField;
+    $nameDone =~ s/\$ms/$milestone/;
+    $nameDue =~ s/\$ms/$milestone/;
 
     my $title = Foswiki::Func::getPreferencesValue($titlePref, $web);
     $title = $meta->expandMacros($title);
-    my $due = $meta->get('FIELD', $due);
-    my $done = $meta->get('FIELD', $done);
+    my $due = $meta->get('FIELD', $nameDue);
+    my $done = $meta->get('FIELD', $nameDone);
 
     push @retval, {
       title => "$title",
@@ -116,6 +117,8 @@ sub _readMilestone {
 
 sub _toHTML {
   my ($type, $data) = @_;
+  return '' unless defined $data;
+
   my $json = to_json($data);
   my $days = $Foswiki::cfg{Extensions}{AmpelPlugin}{WARN} || 3;
 
