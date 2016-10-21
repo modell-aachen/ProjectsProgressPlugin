@@ -1,6 +1,6 @@
 ;(function ($, document, window, undefined) {
   $(document).ready(function() {
-    var lang = $('.timeline').data('lang') || 'en';
+    var lang = $('html').attr('lang') || $('.timeline').data('lang') || 'en';
     moment.locale(lang);
 
     $('.timeline .circle').tooltipster({
