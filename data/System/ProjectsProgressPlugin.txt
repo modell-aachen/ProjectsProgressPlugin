@@ -1,0 +1,25 @@
+%META:TOPICINFO{author="BaseUserMapping_333" comment="" date="1473857507" format="1.1" reprev="2" version="2"}%
+%META:TOPICPARENT{name="Plugins"}%
+---+ !ProjectsProgressPlugin %JQREQUIRE{"chili"}%
+%TOC%
+
+%SHORTDESCRIPTION%
+
+---++ Introduction
+=ProjectsProgressPlugin= basically provides a macro called =MILESTONEINFO= which
+renders information about a project's progress as timeline and/or as traffic
+light.
+
+---++ Installation
+%$INSTALL_INSTRUCTIONS%
+
+---++ Macro: MILESTONEINFO
+%INCLUDE{"VarMILESTONEINFO"}%
+
+| Author: | Modell Aachen GmbH |
+| Copyright: | &copy; 2016, Modell Aachen GmbH |
+| License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+| Release: | %$RELEASE% |
+| Version: | %$VERSION% |
+| Home: | http://www.modell-aachen.de |
+| Support: | http://www.modell-aachen.de |

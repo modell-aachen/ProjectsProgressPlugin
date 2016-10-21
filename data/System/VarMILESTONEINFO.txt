@@ -1,0 +1,43 @@
+%META:TOPICPARENT{name="ProjectsProgressPlugin"}%
+---+ MILESTONEINFO macro
+
+_This is a macro from [[ProjectsProgressPlugin]], used to query/display various pieces of information related to a projects progress/milestone information._
+
+%STARTINCLUDE%
+
+The macro =MILESTONEINFO= is meant to be used by templates only. By default it's
+integrated into [[InternalProjectWebHomeViewTemplate][InternalProjectsAppContrib's WebHomeViewTemplate]].
+
+*Usage*:
+<table>
+  <thead>
+    <tr>
+      <th><strong>Markup</strong></th>
+      <th><strong>Preview</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <verbatim class="tml">%MILESTONEINFO{"$projectWeb.$projectTopic" type="timeline" milestones="%PROJECT_MILESTONES%"}%</verbatim>
+      </td>
+      <td><img src="%ATTACHURL{"timeline.jpg"}%" /></td>
+    </tr>
+    <tr>
+      <td>
+        <verbatim class="tml">%MILESTONEINFO{"$projectWeb.$projectTopic" type="next" milestones="%PROJECT_MILESTONES%"}%
+%MILESTONEINFO{"$projectWeb.$projectTopic" type="milestone" milestones="%PROJECT_MILESTONES%" milestone="MS3"}%</verbatim>
+      </td>
+      <td><img src="%ATTACHURL{"next.jpg"}%" /></td>
+    </tr>
+  </tbody>
+</table>
+
+| *Parameter* | *Description* | *Default* |
+| "..." (or project="") | The webtopic of a project to render the progress for. | |
+| type | The type to render. One of "timeline, milestone, next" | timeline |
+| milestones | A comma separated list of available milestones. Those names are typically defined within the !ProjectForm | |
+| milestone | Required if type is set to =milestone= %BR% Specifies the milestone to render, e.g. MS1 | |
+
+%META:FILEATTACHMENT{name="next.jpg" attachment="next.jpg" attr="" comment="" date="1473857496" path="next.jpg" size="4877" user="BaseUserMapping_333" version="1"}%
+%META:FILEATTACHMENT{name="timeline.jpg" attachment="timeline.jpg" attr="" comment="" date="1473857506" path="timeline.jpg" size="2978" user="BaseUserMapping_333" version="1"}%
